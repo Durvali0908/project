@@ -1,0 +1,100 @@
+<doctype html>
+  <html>
+  <head>
+    <title>Submit complaint</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
+    <style>
+    body {
+    background-image: url('https://www.netsolwater.com/netsol-water/assets/img/product-images/swachh-bharat-abhiyan-essay.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    
+}
+    .lobster-regular {
+  font-family: "Lobster", sans-serif;
+  font-weight: 400;
+  font-style: normal;
+}
+
+    </style>
+  </head>
+  <body class="bg-light">
+    <div class="d-flex justify-content-center align-items-center vh-100">
+  <div class="p-4 rounded shadow lobster-regular" style="background-color: rgba(185, 253, 243, 0.81); width: 90%; max-width: 500px; padding:20px; border-radius:15px; box-shadow: 0 0 15px rgba(0,0,0,0.1)">
+      <h3 class="mt-4">Submit Garbage complaint</h3>
+      <form method="POST" action="/submit_complaint" enctype="multipart/form-data">
+        <div class="mb-3">
+          <label for="location" class="form-label">Location(address/area)</label>
+          <input type="text" name="location" class="form-control" required>       
+<input type="hidden" name="latitude" id="latitude">
+<input type="hidden" name="longitude" id="longitude">          
+        </div>
+        <div class="mb-3">
+          <button type="button" class="btn btn-secondary" onclick="getLocation()">Detect My Location</button>
+        </div>
+        <div class="mb-3">
+          <label for="waste_type" class="form-label">Select type of waste :</label>
+            <select name="waste_type" class="form-control" required>
+              <option value="garbage">Garbage</option>
+              <option value="drainage">Drainage</option>
+              <option value="plastic dump">Plastic Dump</option>
+              <option value="others">others</option>
+            </select>
+        </div>
+         <div class="mb-3">
+            <label for="description" class="form-label">Description (optional)</label>
+            <textarea name="description" class="form-control" rows="3"></textarea>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Upload Photo (Optional)</label>
+          <input type="file" name="photo" class="form-control" accept="image/*" capture="environment">
+        </div>
+        
+        
+        
+        <div class="mb-3">
+          <button type="submit" class="btn btn-primary">
+            Submit complaint
+          </button>
+        </div>
+      </form>
+    </div>
+   <script>
+function getLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async function(position) {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // Store in hidden fields
+            document.getElementById("latitude").value = lat;
+            document.getElementById("longitude").value = lon;
+
+            // Fetch address using reverse geocoding from OpenStreetMap
+            try {
+                const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+                const data = await response.json();
+
+                const address = data.display_name;  // full readable address
+                document.querySelector('input[name="location"]').value = address;
+
+            } catch (err) {
+                alert("❌ Unable to fetch address: " + err.message);
+            }
+
+        }, function(error) {
+            alert("❌ Unable to retrieve location: " + error.message);
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+</script>
+
+  </body>
+  </html>
+</doctype>

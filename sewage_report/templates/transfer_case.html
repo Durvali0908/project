@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=UTF-8">
+  <title>Transfer Case</title>
+</head>
+<body>
+  <div class="d-flex justify-content-center align-items-center vh-100">
+     <div class="p-4 rounded shadow lobster-regular" style="background-color: rgba(185, 253, 243, 0.81); width: 90%; max-width: 500px; padding:80px; border-radius:75px; box-shadow: 0 0 15px rgba(0,0,0,0.1)">
+  <h3 class="mt-4">Transfer Case</h3>
+      <form method="POST" action="/transfer_case" enctype="multipart/form-data">
+        <label for="case_id" class="form-label">Case ID :</label>
+<input type="number" name="case_id" id="case_id" class="form-control mb-3" required onblur="fetchLocation()">
+
+<label for="location" class="form-label">Location:</label>
+<input type="text" name="location" id="location" class="form-control mb-3" readonly> <label for="email" class="form-lebel">Authority Email</label>
+        <input type="email" class="form-control" name="authority_email" required>
+        <button type="submit" class="btn btn-primary w-100">Send Case</button>
+        
+      </form>
+       <script>
+function fetchLocation() {
+    const caseId = document.getElementById("case_id").value;
+    if (!caseId) return;
+
+    fetch(`/get_location/${caseId}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById("location").value = data.location;
+            } else {
+                alert("❌ Case ID not found!");
+            }
+        })
+        .catch(error => {
+            alert("❌ Error fetching location.");
+            console.error(error);
+        });
+}
+</script>
+</body>
+</html>
