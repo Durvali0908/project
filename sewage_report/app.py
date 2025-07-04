@@ -20,7 +20,7 @@ def user_dashboard():
     return render_template('dashboard.html', complaints=complaints)
 #signUp
 @app.route('/user_signup', methods=['GET', 'POST'])
-def signup():
+def user_signup():
     if request.method == 'POST':
         name = request.form['name']
         birth_date = request.form['birth_date']
@@ -37,7 +37,7 @@ def signup():
         conn.close()
         return redirect(url_for('user_signIn'))  # After registration go to login
 
-    return render_template('user_signup.html')  # Make sure signup.html exists
+    return render_template('user_signup.html')  # Make sure user_signup.html exists
 
 #signin
 @app.route('/user_signIn', methods=['GET', 'POST'])
@@ -59,7 +59,7 @@ def user_signIn():
         else:
             return "❌ Invalid credentials"
     
-    return render_template('user_signIn.html')  # Make sure signin.html exists
+    return render_template('user_signIn.html')  # 
 
 
 # ---------------- Complaint Submission -------------
